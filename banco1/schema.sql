@@ -32,3 +32,4 @@ CREATE TABLE venda_produto(
     FOREIGN KEY (venda_id) REFERENCES venda(id) ON DELETE CASCADE,
     FOREIGN KEY (produto_id) REFERENCES produto(id) ON DELETE CASCADE
 );
+

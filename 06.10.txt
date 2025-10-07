@@ -1,0 +1,126 @@
+-- pegar todos os produtos que são vendidos na unidade
+SELECT  
+    *
+FROM
+    vendas_itens2
+WHERE
+    unidade LIKE 'U%'
+ORDER BY 
+    valor_unitario ASC
+LIMIT 20;
+---     
+-- pegar todos os produtos que são vendidos em kg
+
+-- %U - todas as palavras que TERMINAM com U
+-- %U% todas as palavras que possuem o U em sua composição
+-- U% todas as palavras que começam com U
+SELECT  
+    *
+FROM
+    vendas_itens2
+WHERE
+    unidade LIKE '%g%'
+ORDER BY 
+    valor_unitario ASC
+LIMIT 20;
+---- 
+
+SELECT  
+    *
+FROM
+    vendas_itens2
+ORDER BY 
+    data_venda ASC
+LIMIT 40 OFFSET 10;
+
+--- tabela virtual
+
+CREATE TEMP TABLE temp_vendas_itens2 AS 
+SELECT * FROM vendas_itens2
+LIMIT 0;
+
+
+INSERT INTO temp_vendas_itens2 
+SELECT * FROM vendas_itens2
+WHERE data_venda >= '2025-09-10';
+
+SELECT count(*) FROM temp_vendas_itens2;
+
+SELECT * FROM temp_vendas_itens2;
+
+DROP TABLE IF EXISTS temp_vendas_itens2;
+
+
+-- update na tabela real
+
+
+SELECT * FROM vendas_itens2;
+
+ALTER TABLE 
+    vendas_itens2
+ADD COLUMN
+    custo_total NUMERIC(12,2) ;
+
+UPDATE vendas_itens2
+SET custo_total = ROUND(quantidade * valor_unitario, 2);
+
+
+SELECT 
+    venda_id,
+    data_venda,
+    SUM(custo_total) AS valor_total_venda
+FROM 
+    vendas_itens2
+GROUP BY venda_id, data_venda
+ORDER BY valor_total_venda ASC;
+
+
+ALTER TABLE vendas_itens2
+DROP COLUMN custo_total;
+
+SELECT 
+    count(*) AS total_registros
+FROM 
+    vendas_itens2;
+
+SELECT 
+    count(DISTINCT venda_id) AS quantidade_vendas
+FROM 
+    vendas_itens2;
+
+SELECT 
+    count(DISTINCT produto_id) AS quantidade_produtos
+FROM 
+    vendas_itens2;
+
+
+-- total de vendas acima de 500
+
+SELECT 
+    venda_id,
+    data_venda,
+    SUM(custo_total) AS valor_total_venda
+FROM 
+    vendas_itens2
+GROUP BY venda_id, data_venda
+HAVING
+     SUM(custo_total) >= 500
+ORDER BY valor_total_venda ASC;
+
+-- exercicio: quantas linha tem a letra n e quantas são
+---exercicio: encontre as 3 vendas com maior total_vendas usando
+
+SELECT  
+    
+FROM
+    vendas_itens2
+WHERE
+    unidade LIKE '%n%';
+
+
+-- somar o custo total + 5%
+UPDATE vendas_itens2
+SET custo_total = custo_total * 1.05;
+
+
+

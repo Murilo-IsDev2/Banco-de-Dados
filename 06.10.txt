@@ -111,11 +111,11 @@ ORDER BY valor_total_venda ASC;
 ---exercicio: encontre as 3 vendas com maior total_vendas usando
 
 SELECT  
-    
+    count(*) AS quantidade_unidades
 FROM
     vendas_itens2
 WHERE
-    unidade LIKE '%n%';
+    unidade LIKE '%N%';
 
 
 -- somar o custo total + 5%

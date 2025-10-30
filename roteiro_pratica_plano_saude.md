@@ -385,7 +385,7 @@ ALTER TABLE pessoa ALTER COLUMN data_nascimento SET NOT NULL;
 ```
 
 **Observação importante:** antes de aplicar `SET NOT NULL` ou `UNIQUE` garanta que não existam registros violando essa restrição.
-
+D
 ---
 
 ## 4 Pré-checagens

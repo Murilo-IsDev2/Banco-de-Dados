@@ -1,0 +1,95 @@
+-- Inserir categorias
+INSERT INTO categorias (nome) VALUES
+('Alimentação'),
+('Transporte'),
+('Energia Elétrica'),
+('Água'),
+('Internet');
+
+-- Inserir formas de pagamento
+INSERT INTO formas_pagamento (nome) VALUES
+('PIX'),
+('Cartão de Crédito'),
+('Débito'),
+('Dinheiro');
+
+-- Inserir lançamentos (exemplos)
+INSERT INTO lancamentos (descricao, valor, data_lancamento, categoria_id, forma_pagamento_id) VALUES
+('Supermercado - Mercadão', 250.75, '2025-10-01', 1, 2),
+('Conta de Luz - CEMIG', 120.40, '2025-09-25', 3, 3),
+('Assinatura Internet', 99.90, '2025-09-30', 5, 2),
+('Táxi aeroporto', 68.00, '2025-10-02', 2, 1);
+
+UPDATE lancamentos
+SET valor = ROUND(valor * 1.05, 2)
+WHERE data_lancamento < '2025-10-01';
+
+SELECT 
+    valor,
+    data_lancamento 
+FROM 
+    lancamentos;
+
+
+SELECT 
+    l.descricao,
+    l.valor,
+    l.data_lancamento,
+    c.nome AS categorias
+FROM
+    lancamentos l
+RIGHT JOIN
+    categorias c 
+    ON l.categoria_id = c.categoria_id;
+WHERE 
+    l.valor> 100;
+
+
+SELECT 
+    l.descricao,
+    l.valor,
+    l.data_lancamento,
+    c.nome AS categorias,
+    fp.nome AS forma_pagamento
+FROM
+    lancamentos l
+JOIN
+    categorias c 
+    ON l.categoria_id = c.categoria_id
+JOIN
+    formas_pagamento fp
+    ON l.forma_pagamento_id = fp.forma_pagamento_id
+WHERE 
+    l.valor> 100;
+
+
+SELECT 
+    valor,
+    ROUND (valor * 0.08, 2) AS valor_do_imposto,
+    ROUND (valor * 1.08, 2) AS valor_com_imposto,
+    ROUND ((valor * 1.08 / 3), 2) AS valor_parcela_3x,
+    mod(valor* 1.08, 10) AS quantas_parcelas_de_10
+FROM 
+    lancamentos;
+
+--atividades
+
+--Liste a descricao, valor e data_lancamento de todos os lançamentos.
+
+SELECT
+    descricao,
+    valor,
+    data_lancamento
+FROM 
+    lancamentos;
+
+-- Mostre apenas os lançamentos com valor > 100.
+
+SELECT 
+    lancamento_id,
+    valor
+FROM 
+    lancamentos
+WHERE
+    valor > 100;
+

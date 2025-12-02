@@ -1,0 +1,78 @@
+-- INSERTS
+INSERT INTO combustivel (nome, estoque_l) VALUES
+  ('Gasolina', 1200.5),
+  ('Etanol',  800.25),
+  ('Diesel S10', 1500.0);
+
+INSERT INTO funcionario (nome, ativo) VALUES
+  ('Ana Silva', true),
+  ('José Maria', true);
+
+INSERT INTO venda (data_hora, funcionario_id, total) VALUES
+  ('2025-11-01 09:15:00-03', 1, 210.04),
+  ('2025-11-01 10:05:00-03', 2, 150.12),
+  ('2025-11-01 11:00:00-03', 1,  50.15),
+  ('2025-11-01 11:30:00-03', 1,  80.28),
+  ('2025-11-01 11:32:00-03', 2, 110.16),
+  ('2025-11-01 12:32:00-03', 2, 217.50);
+
+INSERT INTO venda_item (venda_id, combustivel_id, quantidade_l, preco_unitario) VALUES
+  (1, 1, 35.6, 5.9),
+  (2, 2, 41.7, 3.6),
+  (3, 1,  8.5, 5.9),
+  (4, 2, 22.3, 3.6),
+  (5, 2, 30.6, 3.6),
+  (6, 3, 37.5, 5.8);
+
+
+-- Demonstrar listagem de combustíveis por estoque decrescente
+SELECT 
+    combustivel_id,
+    nome, 
+    estoque_l
+FROM 
+    combustivel
+ORDER BY
+    estoque_l DESC;
+
+-- Fazer:  
+
+--  total vendido por funcionário
+SELECT 
+    f.nome,
+    SUM(v.total) AS total_vendido
+FROM 
+    funcionario f
+JOIN 
+    venda v ON f.funcionario_id = v.funcionario_id 
+GROUP BY
+    f.funcionario_id
+ORDER BY
+    total_vendido DESC;
+
+-- Exemplo total vendido por combustível usando venda_item
+SELECT 
+    c.nome,
+    SUM(vi.quantidade_l * vi.preco_unitario) AS total_vendido
+FROM 
+    combustivel c 
+JOIN
+    venda_item vi ON vi.combustivel_id = c.combustivel_id
+GROUP BY 
+    c.combustivel_id
+ORDER BY 
+    total_vendido DESC;
+
+-- Crie view que mostra resumo de venda por combustível
+
+
+CREATE VIEW resumo_venda_combustivel AS
+SELECT
+  c.combustivel_id,
+  c.nome,
+  SUM(vi.quantidade_l) AS litros_vendidos,
+  SUM(vi.quantidade_l * vi.preco_unitario) AS valor_vendido
+FROM combustivel c
+JOIN venda_item vi ON vi.combustivel_id = c.combustivel_id
+GROUP BY c.combustivel_id, c.nome;
+
